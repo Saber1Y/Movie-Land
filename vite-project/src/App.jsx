@@ -1,4 +1,4 @@
-import { useEffect }from 'react'
+import { useState, useEffect }from 'react'
 import './App.scss';
 import SeacrhIcon from './search.svg';
 import MovieCard  from './MovieCard';
@@ -17,15 +17,18 @@ const Movies = {
 }
 
 const App = () => {
+ const [movies, setMovies] = useState([])
+ const [searchTerm, setSearchTerm] = useState("")
+
   const searchMovies = async (title) => {
     const response = await fetch(`${API_URL}&s=${title}`);
     const data = await response.json();
 
-    // console.log(data.Search);
+    setMovies(data.Search)
   }
 
-useEffect(() => {
-  searchMovies('batman');
+  useEffect(() => {
+  searchMovies('spiderman');
 }, []);
 
   return (
@@ -34,19 +37,26 @@ useEffect(() => {
         <h1>MOVIE-LAND</h1>
 
         <div className="search">
-          <input placeholder='Search for movies' value={'batman'} onChange={() => {
-
+          <input placeholder='Search for movies' value={searchTerm} onChange={(e) => {
+           setSearchTerm(e.target.value)
           }} 
           />
           <img src={SeacrhIcon} alt='search icon'
-           onClick={() => {
+           onClick={() => searchMovies(searchTerm)} />
+        </div>
 
-           }}
-           />
-        </div>
         <div className="container">
-           <MovieCard Movies={Movies} />
-        </div>
+  {movies?.length > 0 ? (
+    movies.map((movie) => (
+      <MovieCard key={movie.imdbID} movie={movie} />
+    ))
+  ) : (
+    <div className="empty">
+      <h2>No Movies were found</h2>
+    </div>
+  )}
+</div>
+
       </div>
     </div>
   )
