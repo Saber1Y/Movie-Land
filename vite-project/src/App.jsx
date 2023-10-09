@@ -1,6 +1,7 @@
 import { useEffect }from 'react'
 import './App.scss';
 import SeacrhIcon from './search.svg';
+import MovieCard  from './MovieCard';
 
 // 9e8d5592
 
@@ -16,13 +17,11 @@ const Movies = {
 }
 
 const App = () => {
-
-
   const searchMovies = async (title) => {
     const response = await fetch(`${API_URL}&s=${title}`);
     const data = await response.json();
 
-    console.log(data.Search);
+    // console.log(data.Search);
   }
 
 useEffect(() => {
@@ -46,7 +45,7 @@ useEffect(() => {
            />
         </div>
         <div className="container">
-
+           <MovieCard Movies={Movies} />
         </div>
       </div>
     </div>
